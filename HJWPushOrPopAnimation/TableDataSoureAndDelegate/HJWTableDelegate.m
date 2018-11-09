@@ -13,19 +13,22 @@
 {
     HJWTableDelegateBlock _hjwTableDelegateBlock;//回调
     BOOL _isTwoDimension;//是否是二维, 这里只支持一二维
-    CGFloat _rowHeight;//默认的高度
-
+    
 }
 @end
+
+//这里用来区分用户一开始有没有设置高度值
+static const CGFloat baseHeadOrFootHeight = -1.f;
+static const CGFloat baseRowHeight = -1.f;
 
 @implementation HJWTableDelegate
 - (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView *)table WithIsTwoDimension:(BOOL)isTwoDimension configureCellBlock:(HJWTableDelegateBlock)tableDelegateBlock;{
     if (self = [super init]) {
         _dataArr = dataArr;
         _hjwTableDelegateBlock = tableDelegateBlock;
-        _rowHeight = 44.f;
-        _footHeight = 0.f;
-        _headHeight = 0.f;
+        _footHeight = baseHeadOrFootHeight;
+        _headHeight = baseHeadOrFootHeight;
+        _cellHeight = baseRowHeight;
         _isTwoDimension = isTwoDimension;
         _table = table;
         
@@ -88,7 +91,7 @@
         return UITableViewAutomaticDimension;
     }
     //model里面的行高
-    if (self.cellHeight <= 0.f) {
+    else if (self.cellHeight <= baseRowHeight) {
         id model = nil;
         if (_isTwoDimension){
             NSArray *subArr = _dataArr[(NSInteger)indexPath.section];
@@ -102,10 +105,10 @@
         }else{
             return 50;
         }
+    }else{
+        //默认的行高
+        return _cellHeight;
     }
-    //默认的行高
-    return _cellHeight;
-
 }
 //#endif
 
@@ -118,13 +121,32 @@
 }
 //估高
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.automaticDimension) {//只有自动计算高度的时候才要缓存
+    //自动段行高
+    if (_automaticDimension) {
         NSString *key = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
         NSNumber *height = [self.cellHeightsDictionary objectForKey:key];
         if (height) return height.doubleValue;
+        return UITableViewAutomaticDimension;
     }
-   
-    return UITableViewAutomaticDimension;
+    //model里面的行高
+    else if (self.cellHeight <= baseRowHeight) {
+        id model = nil;
+        if (_isTwoDimension){
+            NSArray *subArr = _dataArr[(NSInteger)indexPath.section];
+            model = subArr[indexPath.row];
+        }else{
+            model = _dataArr[indexPath.row];
+        }
+        if ([model isKindOfClass:[BaseModel class]]) {
+            BaseModel *m = (BaseModel*)model;
+            return m.cellHight;
+        }else{
+            return 50;
+        }
+    }else{
+        //默认的行高
+        return _cellHeight;
+    }
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
@@ -132,11 +154,18 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (self.footHeight > 0) {
+    if (self.footHeight > baseHeadOrFootHeight) {
         return self.footHeight;
-    }else{
-        HJWBaseTableHeadOrFootView *view = self.footViews[section];
-        return view.viewHeight;
+    }
+    else{
+        if (self.footViews.count > 0)
+        {
+            HJWBaseTableHeadOrFootView *view = self.footViews[section];
+            return view.viewHeight;
+        }else
+        {
+            return 0.01;
+        }
     }
 }
 
@@ -145,11 +174,18 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.headHeight > 0) {
+    if (self.headHeight > baseHeadOrFootHeight) {
         return self.headHeight;
-    }else{
-        HJWBaseTableHeadOrFootView *view = self.headViews[section];
-        return view.viewHeight;
+    }
+    else{
+        if (self.headViews.count > 0)
+        {
+            HJWBaseTableHeadOrFootView *view = self.headViews[section];
+            return view.viewHeight;
+        }else
+        {
+            return 0.01;
+        }
     }
 }
 
@@ -193,6 +229,7 @@
         self.table.estimatedRowHeight = 0;
         self.table.estimatedSectionFooterHeight = 0;
         self.table.estimatedSectionHeaderHeight = 0;
+        
     }
 }
 @end

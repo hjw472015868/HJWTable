@@ -140,7 +140,7 @@
 
 -(HJWDataSource *)dataSource{
     if (!_dataSource) {
-        _dataSource = [[HJWDataSource alloc] initWithDataArr:self.dataArr WithTable:self.table WithIsTwoDimension:NO cellIdentifier:@"xx" configureCellBlock:^(UITableViewCell *cell, id item, NSIndexPath *indexPath) {
+        _dataSource = [[HJWDataSource alloc] initWithDataArr:self.dataArr WithTable:self.table WithIsTwoDimension:NO WithCellIdentifier:@"xx" configureCellBlock:^(UITableViewCell *cell, id item, NSIndexPath *indexPath) {
             NSLog(@"%@",item);
             cell.textLabel.numberOfLines = 0;
             indexPath.row%2 ? (cell.textLabel.textColor = [UIColor purpleColor]) : (cell.textLabel.textColor = [UIColor orangeColor]);

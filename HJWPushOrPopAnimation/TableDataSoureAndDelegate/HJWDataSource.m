@@ -10,20 +10,24 @@
 
 @interface HJWDataSource ()
 {
-    NSString    *_cellIdentifier;//cellid
+    id    _cellIdentifier;//cellid
     HJWDataSourceBlock _hjwDataSourceBlock;//回调block
     BOOL _isTwoDimension;//是否是二维, 这里只支持一二维
+    BOOL _isMoreCell;//判断是不是多个不同的cell
 }
 @end
 
 @implementation HJWDataSource
 
 
-- (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView*)table WithIsTwoDimension:(BOOL)isTwoDimension cellIdentifier:(NSString *)aCellIdentifier configureCellBlock:(HJWDataSourceBlock)hjwDataSourceBlock;{
+- (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView*)table WithIsTwoDimension:(BOOL)isTwoDimension WithCellIdentifier:(id)cellIdentifie configureCellBlock:(HJWDataSourceBlock)hjwDataSourceBlock;{
     self = [super init];
     if (self) {
         _dataArr = dataArr;
-        _cellIdentifier = aCellIdentifier;
+        _cellIdentifier = cellIdentifie;
+        if ([cellIdentifie isKindOfClass:[NSArray class]]) {
+            _isMoreCell = YES;
+        }
         _hjwDataSourceBlock = hjwDataSourceBlock;
         _isTwoDimension = isTwoDimension;
         _table = table;
@@ -35,7 +39,7 @@
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        [self.table reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 //    });
-//    
+//
 //}
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath {
     if (_isTwoDimension){
@@ -59,11 +63,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:_cellIdentifier];
-    if (cell==nil) {
-        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:_cellIdentifier];
+    NSString *cellIdentifier = nil;
+    if (_isMoreCell) {
+        NSArray *arr = (NSArray *)_cellIdentifier;
+        cellIdentifier = arr[indexPath.section];
+    }else{
+        cellIdentifier = (NSString *)_cellIdentifier;
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row];
+    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
     id item = [self itemAtIndexPath:indexPath];
     _hjwDataSourceBlock(cell, item, indexPath);
     return cell;
