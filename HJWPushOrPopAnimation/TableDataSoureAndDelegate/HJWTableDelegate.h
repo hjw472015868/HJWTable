@@ -57,6 +57,12 @@ NS_ASSUME_NONNULL_BEGIN
 /***根据indexPath拿到这个传进来的内容*/
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
 
+/****下拉刷新*/
+- (void)dropDownRefreshDataBlock:(void (^)(void))dropDownBlock;
+
+/***上拉加载获取数据*/
+-(void)pullUpLoadingMoreData:(void (^)(void))pullUpBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

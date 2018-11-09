@@ -27,18 +27,43 @@
         _headHeight = 0.f;
         _isTwoDimension = isTwoDimension;
         _table = table;
-        
         _cellHeightsDictionary = @{}.mutableCopy;
     }
     return self;
 }
-//-(void)setDataArr:(NSArray *)dataArr{
-//    _dataArr = dataArr;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.table reloadData];
-//    });
-////    [self.table reloadData];
-//}
+
+#pragma mark - 下拉刷新
+- (void)dropDownRefreshDataBlock:(void (^)(void))dropDownBlock
+{
+    WeakObj(self);
+    self.table.mj_header= [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        if ([selfWeak.table.mj_footer isRefreshing]) {
+            [selfWeak.table.mj_footer endRefreshing];//这里只是模拟
+            [selfWeak.table.mj_header endRefreshing];
+            return;
+        }
+        //block传出去获取详情列表
+        dropDownBlock();
+    }];
+    [self.table.mj_header beginRefreshing];//手动吊起加载
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    self.table.mj_header.automaticallyChangeAlpha = YES;
+}
+
+#pragma  mark -上拉加载获取数据
+-(void)pullUpLoadingMoreData:(void (^)(void))pullUpBlock
+{
+    WeakObj(self);
+    self.table.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        if ([selfWeak.table.mj_header isRefreshing]) {
+            [selfWeak.table.mj_header endRefreshing];//这里只是模拟
+            [selfWeak.table.mj_footer endRefreshing];
+            return;
+        }
+        pullUpBlock();
+    }];
+}
+
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;{
     if (_isTwoDimension){
         NSArray *subArr = _dataArr[(NSInteger)indexPath.section];
@@ -146,6 +171,7 @@
     return arr;
 }
 
+#pragma mark - 设置是否可以自动刷新
 -(void)setAutomaticDimension:(BOOL)automaticDimension{
     _automaticDimension = automaticDimension;
     //这里不能设置为0 ,为就默认为是关闭, 所以,不管怎么样就直接不要为0

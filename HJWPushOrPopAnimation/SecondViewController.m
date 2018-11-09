@@ -63,9 +63,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor purpleColor];
     self.navigationItem.title = @"second";
-    [self createTable];
-    [self dropDownRefreshData];
-    [self pullUpLoadingMoreData];
+    [self createTable];;
 }
 
 - (void)createTable{
@@ -96,9 +94,7 @@
         switch (index) {//这里是根据数组的内容来的, 自己看
             case 0://删除
             {
-                //置顶的时候这里需要删除indexPath的高度
-//                NSString *fromkey = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
-//                [weakSelf.tableDelegate.cellHeightsDictionary removeObjectForKey:fromkey];
+                //为了方便,直接删除所有的行高缓存
                 NSArray *keys = weakSelf.tableDelegate.cellHeightsDictionary.allKeys;
                 [weakSelf.tableDelegate.cellHeightsDictionary removeObjectsForKeys:keys];
                 [weakSelf.dataArr removeObjectAtIndex:indexPath.row];
@@ -107,19 +103,7 @@
                 break;
             case 1://置顶
             {
-                //置顶的时候这里需要删除indexPath的高度
-//                NSString *fromkey = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
-//                [weakSelf.tableDelegate.cellHeightsDictionary removeObjectForKey:fromkey];
-//
-//                NSString *secondkey = @"0-1";
-//                [weakSelf.tableDelegate.cellHeightsDictionary removeObjectForKey:secondkey];
-//
-//                NSString *tokey = @"0-0";
-//                [weakSelf.tableDelegate.cellHeightsDictionary removeObjectForKey:tokey];
-//
-//                for (NSString *key in weakSelf.tableDelegate.cellHeightsDictionary) {
-//                    [weakSelf.tableDelegate.cellHeightsDictionary removeObjectForKey:key];
-//                }
+               //为了方便,直接删除所有的行高缓存
                 NSArray *keys = weakSelf.tableDelegate.cellHeightsDictionary.allKeys;
                 [weakSelf.tableDelegate.cellHeightsDictionary removeObjectsForKeys:keys];
                 [weakSelf.dataArr removeObject:item];
@@ -139,6 +123,17 @@
                 break;
         }
     };
+    
+    //下拉刷新
+    [self.tableDelegate dropDownRefreshDataBlock:^{
+        NSLog(@"下拉刷新");
+    }];
+    
+    //上拉加载
+    [self.tableDelegate pullUpLoadingMoreData:^{
+        NSLog(@"上拉加载");
+    }];
+    
 }
 
 -(HJWDataSource *)dataSource{
@@ -173,40 +168,6 @@
     NSLog(@"释放");
 }
 
-#pragma mark - 下拉刷新
-- (void)dropDownRefreshData
-{
-    WeakObj(self);
-    self.table.mj_header= [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        if ([selfWeak.table.mj_footer isRefreshing]) {
-            [selfWeak.table.mj_footer endRefreshing];
-            [selfWeak.table.mj_header endRefreshing];
-            return;
-        }
-        //获取详情列表
-        [selfWeak.table reloadData];
-//        selfWeak.pageCount = 1;
-//        [selfWeak requestForFlash];
-    }];
-    [self.table.mj_header beginRefreshing];//手动吊起加载
-    // 设置自动切换透明度(在导航栏下面自动隐藏)
-    self.table.mj_header.automaticallyChangeAlpha = YES;
-}
-
-#pragma  mark -上拉加载获取数据
--(void)pullUpLoadingMoreData
-{
-    WeakObj(self);
-    self.table.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        if ([selfWeak.table.mj_header isRefreshing]) {
-            [selfWeak.table.mj_header endRefreshing];
-            [selfWeak.table.mj_footer endRefreshing];
-            return;
-        }
-        [selfWeak.table reloadData];
-//        [selfWeak requestForFlash];
-    }];
-}
 /*
 #pragma mark - Navigation
 
