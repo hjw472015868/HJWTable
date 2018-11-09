@@ -19,7 +19,7 @@
 @implementation HJWDataSource
 
 
-- (instancetype)initWithDataArr:(NSArray *)dataArr WithTable:(UITableView*)table WithIsTwoDimension:(BOOL)isTwoDimension cellIdentifier:(NSString *)aCellIdentifier configureCellBlock:(HJWDataSourceBlock)hjwDataSourceBlock;{
+- (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView*)table WithIsTwoDimension:(BOOL)isTwoDimension cellIdentifier:(NSString *)aCellIdentifier configureCellBlock:(HJWDataSourceBlock)hjwDataSourceBlock;{
     self = [super init];
     if (self) {
         _dataArr = dataArr;

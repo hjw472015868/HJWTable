@@ -36,7 +36,8 @@
     if (!_headViews) {
         _headViews = [@[] mutableCopy];
         for (NSInteger i=0; i<self.dataArr.count; i++) {
-            UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 60)];
+            HJWBaseTableHeadOrFootView *v = [[HJWBaseTableHeadOrFootView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 60)];
+            v.viewHeight = 100;
             UILabel *lab = [[UILabel alloc] initWithFrame:v.bounds];
             lab.text = @"我是头部视图";
             v.backgroundColor = [UIColor purpleColor];
@@ -49,7 +50,8 @@
     if (!_headViews) {
         _footViews = [@[] mutableCopy];
         for (NSInteger i=0; i<self.dataArr.count; i++) {
-            UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
+            HJWBaseTableHeadOrFootView *v = [[HJWBaseTableHeadOrFootView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
+            v.viewHeight = 60;
             UILabel *lab = [[UILabel alloc] initWithFrame:v.bounds];
             lab.text = @"我是尾部视图";
             v.backgroundColor = [UIColor orangeColor];
@@ -74,16 +76,16 @@
     table.dataSource = self.dataSource;
     table.delegate = self.tableDelegate;
     //开启是否自适应cell高度
-    self.tableDelegate.automaticDimension = YES;
-
+//    self.tableDelegate.automaticDimension = YES;
+//    self.tableDelegate.cellHeight = 100;
     //这是设置左滑的显示, 不设置就不能能左滑, 就这么简单
     self.tableDelegate.editActionsTitleArr = @[@"删除", @"置顶", @"添加"];
     self.tableDelegate.editActionsColorArr = @[[UIColor orangeColor], [UIColor redColor], [UIColor blueColor]];
     
     //下面这些头部尾部的东西, 有就设置, 没有就不设置
-    self.tableDelegate.headHeight = 60;//设置头部视图高度
+//    self.tableDelegate.headHeight = 60;//设置头部视图高度
     self.tableDelegate.footViews = self.footViews;//设置头部视图
-    self.tableDelegate.footHeight = 30;//设置尾部视图高
+//    self.tableDelegate.footHeight = 30;//设置尾部视图高
     self.tableDelegate.headViews = self.headViews;//设置尾部视图
     [self.view addSubview:table];
     
@@ -128,7 +130,7 @@
     [self.tableDelegate dropDownRefreshDataBlock:^{
         NSLog(@"下拉刷新");
     }];
-    
+
     //上拉加载
     [self.tableDelegate pullUpLoadingMoreData:^{
         NSLog(@"上拉加载");
@@ -150,7 +152,7 @@
 
 -(HJWTableDelegate *)tableDelegate{
     if (!_tableDelegate) {
-        //二维
+        //一维
         __weak typeof(self) weakSelf = self;
         _tableDelegate = [[HJWTableDelegate alloc] initWithDataArr:self.dataArr WithTable:self.table WithIsTwoDimension:NO configureCellBlock:^(id item, NSIndexPath *indexPath) {
             NSLog(@"点击的是%ld-%ld", indexPath.section, indexPath.row);

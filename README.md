@@ -17,6 +17,8 @@ table.delegate = self.tableDelegate;
 
 7.至于父类cell没有写,  因为这个很多写法, 自己去搞
 
+8.头部视图的高度这里如果继承了baseHeadFootView,那么会有一个默认属性viewHeight,这个高度会直接用来当成高度, 如果自己设置了headHeight或者footHeight 就按照设置的这个值来 , 设置这个值所有的头部或尾部视图高度都一样,  如果继承, 需要把集成的viewHeight属性改掉就可以了
+
 
 注意:
 1.dataSource里面的canMoveRow属性书控制整个table的所有cell的开关, 这里没有写indexPath数组,去判断哪些cell不能进行编辑

@@ -26,6 +26,7 @@
 		D5D54175218FF57D0001D96B /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5D54174218FF57D0001D96B /* SecondViewController.m */; };
 		D5D54178218FF8180001D96B /* HJWPushAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = D5D54177218FF8180001D96B /* HJWPushAnimator.m */; };
 		D5D5417B21900F3D0001D96B /* HJWAnimatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5D5417A21900F3D0001D96B /* HJWAnimatorView.m */; };
+		D5E5967421957C620024B307 /* HJWBaseTableHeadOrFootView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5E5967321957C620024B307 /* HJWBaseTableHeadOrFootView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,8 @@
 		D5D54177218FF8180001D96B /* HJWPushAnimator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HJWPushAnimator.m; sourceTree = "<group>"; };
 		D5D5417921900F3D0001D96B /* HJWAnimatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HJWAnimatorView.h; sourceTree = "<group>"; };
 		D5D5417A21900F3D0001D96B /* HJWAnimatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HJWAnimatorView.m; sourceTree = "<group>"; };
+		D5E5967221957C620024B307 /* HJWBaseTableHeadOrFootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HJWBaseTableHeadOrFootView.h; sourceTree = "<group>"; };
+		D5E5967321957C620024B307 /* HJWBaseTableHeadOrFootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HJWBaseTableHeadOrFootView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +109,8 @@
 				D5CA3CAD21919807009E6552 /* HJWTableDelegate.m */,
 				D54B6D8521928C31008E0352 /* BaseModel.h */,
 				D54B6D8621928C31008E0352 /* BaseModel.m */,
+				D5E5967221957C620024B307 /* HJWBaseTableHeadOrFootView.h */,
+				D5E5967321957C620024B307 /* HJWBaseTableHeadOrFootView.m */,
 			);
 			path = TableDataSoureAndDelegate;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 			files = (
 				D5D54178218FF8180001D96B /* HJWPushAnimator.m in Sources */,
 				D5CA3CAE21919807009E6552 /* HJWTableDelegate.m in Sources */,
+				D5E5967421957C620024B307 /* HJWBaseTableHeadOrFootView.m in Sources */,
 				D5D54175218FF57D0001D96B /* SecondViewController.m in Sources */,
 				D5D54160218FE9F40001D96B /* main.m in Sources */,
 				D5D5417B21900F3D0001D96B /* HJWAnimatorView.m in Sources */,
@@ -444,7 +450,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.WuHanYHJS.YHCoreCompetence;
+				PRODUCT_BUNDLE_IDENTIFIER = com.YHJS.EBNodeApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -464,7 +470,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.WuHanYHJS.YHCoreCompetence;
+				PRODUCT_BUNDLE_IDENTIFIER = com.YHJS.EBNodeApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

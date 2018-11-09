@@ -8,6 +8,7 @@
 
 #import "HJWTableDelegate.h"
 #import "BaseModel.h"
+#import "HJWBaseTableHeadOrFootView.h"
 @interface HJWTableDelegate ()
 {
     HJWTableDelegateBlock _hjwTableDelegateBlock;//回调
@@ -18,7 +19,7 @@
 @end
 
 @implementation HJWTableDelegate
-- (instancetype)initWithDataArr:(NSArray *)dataArr WithTable:(UITableView *)table WithIsTwoDimension:(BOOL)isTwoDimension configureCellBlock:(HJWTableDelegateBlock)tableDelegateBlock;{
+- (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView *)table WithIsTwoDimension:(BOOL)isTwoDimension configureCellBlock:(HJWTableDelegateBlock)tableDelegateBlock;{
     if (self = [super init]) {
         _dataArr = dataArr;
         _hjwTableDelegateBlock = tableDelegateBlock;
@@ -27,7 +28,7 @@
         _headHeight = 0.f;
         _isTwoDimension = isTwoDimension;
         _table = table;
-        _cellHeightsDictionary = @{}.mutableCopy;
+        
     }
     return self;
 }
@@ -110,14 +111,19 @@
 
 // save height
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *key = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
-    [self.cellHeightsDictionary setObject:@(cell.frame.size.height) forKey:key];
+    if (self.automaticDimension) {//只有自动计算高度的时候才要缓存
+        NSString *key = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
+        [self.cellHeightsDictionary setObject:@(cell.frame.size.height) forKey:key];
+    }
 }
 //估高
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *key = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
-    NSNumber *height = [self.cellHeightsDictionary objectForKey:key];
-    if (height) return height.doubleValue;
+    if (self.automaticDimension) {//只有自动计算高度的时候才要缓存
+        NSString *key = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
+        NSNumber *height = [self.cellHeightsDictionary objectForKey:key];
+        if (height) return height.doubleValue;
+    }
+   
     return UITableViewAutomaticDimension;
 }
 
@@ -126,23 +132,25 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-//    if (_automaticDimension) {
-//        return UITableViewAutomaticDimension;
-//    }
-    return self.footHeight;
+    if (self.footHeight > 0) {
+        return self.footHeight;
+    }else{
+        HJWBaseTableHeadOrFootView *view = self.footViews[section];
+        return view.viewHeight;
+    }
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     return self.headViews[section];
 }
 
-
-
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    if (_automaticDimension) {
-//        return UITableViewAutomaticDimension;
-//    }
-    return self.headHeight;
+    if (self.headHeight > 0) {
+        return self.headHeight;
+    }else{
+        HJWBaseTableHeadOrFootView *view = self.headViews[section];
+        return view.viewHeight;
+    }
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -180,6 +188,7 @@
         self.table.estimatedSectionFooterHeight = 0;
         self.table.estimatedSectionHeaderHeight=0;
         self.table.rowHeight = UITableViewAutomaticDimension;
+        _cellHeightsDictionary = @{}.mutableCopy;
     }else{
         self.table.estimatedRowHeight = 0;
         self.table.estimatedSectionFooterHeight = 0;

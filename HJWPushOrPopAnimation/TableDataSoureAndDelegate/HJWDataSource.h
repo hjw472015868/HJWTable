@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /***是否可以移动的IndexPath*/
 @property (nonatomic, assign) BOOL *canMoveRow;
 /***初始化*/
-- (instancetype)initWithDataArr:(NSArray *)dataArr WithTable:(UITableView*)table WithIsTwoDimension:(BOOL)isTwoDimension cellIdentifier:(NSString *)aCellIdentifier configureCellBlock:(HJWDataSourceBlock)hjwDataSourceBlock;
+- (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView*)table WithIsTwoDimension:(BOOL)isTwoDimension cellIdentifier:(NSString *)aCellIdentifier configureCellBlock:(HJWDataSourceBlock)hjwDataSourceBlock;
 /***根据indexPath拿到这个传进来的内容*/
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
 

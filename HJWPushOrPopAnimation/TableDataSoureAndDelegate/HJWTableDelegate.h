@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /***尾部视图数组*/
 @property (nonatomic, strong) NSArray *footViews;
 /***数据源*/
-@property (nonatomic, strong) NSArray *dataArr;
+@property (nonatomic, strong) NSMutableArray *dataArr;
 /***table*/
 @property (nonatomic, strong) UITableView *table;
 /***左滑的title的数据源*/
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
  tableDelegateBlock 回调
  automaticDimension 是否自动算行高
  */
-- (instancetype)initWithDataArr:(NSArray *)dataArr WithTable:(UITableView *)table WithIsTwoDimension:(BOOL)isTwoDimension configureCellBlock:(HJWTableDelegateBlock)tableDelegateBlock;
+- (instancetype)initWithDataArr:(NSMutableArray *)dataArr WithTable:(UITableView *)table WithIsTwoDimension:(BOOL)isTwoDimension configureCellBlock:(HJWTableDelegateBlock)tableDelegateBlock;
 /***根据indexPath拿到这个传进来的内容*/
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
 
