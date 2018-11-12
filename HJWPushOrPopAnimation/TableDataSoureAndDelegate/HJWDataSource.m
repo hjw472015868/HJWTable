@@ -8,12 +8,18 @@
 
 #import "HJWDataSource.h"
 
+typedef NS_ENUM(NSInteger, KMoreCell) {
+    KMoreCell_One = 0,//一个cell
+    KMoreCell_Section,//按分区来算
+    KMoreCell_BaseModel//不同的model对应不同的cell
+};
+
 @interface HJWDataSource ()
 {
     id    _cellIdentifier;//cellid
     HJWDataSourceBlock _hjwDataSourceBlock;//回调block
     BOOL _isTwoDimension;//是否是二维, 这里只支持一二维
-    BOOL _isMoreCell;//判断是不是多个不同的cell
+    KMoreCell _kMoreCell;//判断是不是多个不同的cell
 }
 @end
 
@@ -25,8 +31,13 @@
     if (self) {
         _dataArr = dataArr;
         _cellIdentifier = cellIdentifie;
-        if ([cellIdentifie isKindOfClass:[NSArray class]]) {
-            _isMoreCell = YES;
+        if ([cellIdentifie isKindOfClass:[NSString class]]) {
+            _kMoreCell = KMoreCell_One;
+        }
+        else if ([cellIdentifie isKindOfClass:[NSArray class]]) {
+            _kMoreCell = KMoreCell_Section;
+        }else{
+            _kMoreCell = KMoreCell_BaseModel;
         }
         _hjwDataSourceBlock = hjwDataSourceBlock;
         _isTwoDimension = isTwoDimension;
@@ -64,11 +75,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = nil;
-    if (_isMoreCell) {
+    
+    if (_kMoreCell == KMoreCell_One) {
+        cellIdentifier = (NSString *)_cellIdentifier;
+    }
+    else if (_kMoreCell == KMoreCell_Section) {
         NSArray *arr = (NSArray *)_cellIdentifier;
         cellIdentifier = arr[indexPath.section];
     }else{
-        cellIdentifier = (NSString *)_cellIdentifier;
+        BaseModel *model = [self itemAtIndexPath:indexPath];
+        cellIdentifier = model.cellIdentifier;
     }
     UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
