@@ -14,7 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BaseModel : NSObject
 
+/***基础高度*/
 @property (nonatomic, assign) CGFloat cellHight;
+
+/***是否可以编辑*/
+@property (nonatomic, assign) BOOL canEdite;
 
 + (NSMutableArray *) returnModelArrWithListArr:(NSArray *)listArr;
 

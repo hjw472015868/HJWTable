@@ -21,7 +21,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blueColor];
     self.navigationItem.title = @"first";
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated{

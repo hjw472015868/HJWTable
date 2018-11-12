@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "BaseModel.h"
 
 typedef void (^HJWDataSourceBlock)(UITableViewCell *cell, id item, NSIndexPath *indexPath);
 
@@ -19,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 /***table*/
 @property (nonatomic, strong) UITableView *table;
 ///***是否可以编辑的IndexPath*/
-//@property (nonatomic, strong) NSIndexPath *canEditRowAtIndexPath;
+@property (nonatomic, strong) NSMutableDictionary *cantEditRowDic;
 /***是否可以移动的IndexPath*/
 @property (nonatomic, assign) BOOL *canMoveRow;
 /***初始化*/

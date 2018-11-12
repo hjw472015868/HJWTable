@@ -189,9 +189,9 @@ static const CGFloat baseRowHeight = -1.f;
     }
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return @"删除";
-}
+//- (NSString *) tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    return @"删除";
+//}
 
 /**
  *  左滑cell时出现什么按钮

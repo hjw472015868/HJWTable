@@ -76,11 +76,12 @@
     table.dataSource = self.dataSource;
     table.delegate = self.tableDelegate;
     //开启是否自适应cell高度
-//    self.tableDelegate.automaticDimension = YES;
+    self.tableDelegate.automaticDimension = YES;
 //    self.tableDelegate.cellHeight = 100;
     //这是设置左滑的显示, 不设置就不能能左滑, 就这么简单
     self.tableDelegate.editActionsTitleArr = @[@"删除", @"置顶", @"添加"];
     self.tableDelegate.editActionsColorArr = @[[UIColor orangeColor], [UIColor redColor], [UIColor blueColor]];
+    self.dataSource.cantEditRowDic = [@{} mutableCopy];
     
     //下面这些头部尾部的东西, 有就设置, 没有就不设置
 //    self.tableDelegate.headHeight = 60;//设置头部视图高度

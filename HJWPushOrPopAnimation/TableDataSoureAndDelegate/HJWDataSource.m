@@ -80,24 +80,22 @@
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-    //这里暂时控制的是所有的cell, 并没做单独indexpathh处理, 自己写吧
+    //先以model里面的为主
+    id item = [self itemAtIndexPath:indexPath];
+    if ([item isKindOfClass:[BaseModel class]]) {
+        BaseModel *model = (BaseModel *)item;
+        return model.canEdite;
+    }//如果字典里面没有就代表可以编辑
+    else if (_cantEditRowDic) {
+        NSString *key = [NSString stringWithFormat:@"%ld-%ld",indexPath.section, indexPath.row];
+        if (_cantEditRowDic[key]) {
+            return NO;
+        }else{
+            return YES;
+        }
+    }
     return !self.canMoveRow;
 }
-
-//- (NSString *) tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return @"删除";
-//}
-//-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    id item = nil;
-//    if (_isTwoDimension) {
-//        item = self.dataArr[indexPath.section][indexPath.row];
-//        [self.dataArr[indexPath.section] removeObject:item];
-//    }else{
-//        item = self.dataArr[indexPath.row];
-//        [self.dataArr removeObject:item];
-//    }
-//    [self.table deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//}
 
 
 
